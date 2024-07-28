@@ -1,0 +1,31 @@
+version: '3.1'
+
+services:
+  mysql_db:
+    image: mysql:8
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret1
+      MYSQL_DATABASE: base
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+    volumes:
+      - ./dbdata:/var/lib/mysql/
+  
+  rabbitmq:
+    image: rabbitmq:3.9.27-management-alpine
+    hostname: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=test
+      - RABBITMQ_DEFAULT_PASS=rabbitmqxtest
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/mnesia/
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+

@@ -1,0 +1,86 @@
+basePath: /
+definitions:
+  baseModel.ErrorResponse:
+    properties:
+      error_code:
+        type: integer
+      error_message:
+        type: string
+      is_error:
+        type: boolean
+    type: object
+  taskController.CreateOneRequest:
+    properties:
+      task:
+        $ref: '#/definitions/taskController.CreateOneRequestTask'
+    type: object
+  taskController.CreateOneRequestTask:
+    properties:
+      description:
+        type: string
+      email_sender:
+        type: string
+      recipient_email:
+        type: string
+    type: object
+  taskController.CreateOneResponse:
+    properties:
+      task:
+        $ref: '#/definitions/taskController.Task'
+    type: object
+  taskController.Task:
+    properties:
+      status:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: test Posiflora
+  version: 1.0.0
+paths:
+  /notifications:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/taskController.CreateOneRequestTask'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/baseModel.ErrorResponse'
+      tags:
+      - Task
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/taskController.CreateOneRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/taskController.CreateOneResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/baseModel.ErrorResponse'
+      tags:
+      - Task
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
